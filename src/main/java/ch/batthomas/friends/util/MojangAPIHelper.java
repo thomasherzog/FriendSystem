@@ -121,7 +121,7 @@ public class MojangAPIHelper {
         try {
             return future.get();
         } catch (InterruptedException | ExecutionException ex) {
-            Logger.getLogger(MySQLConnector.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MojangAPIHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

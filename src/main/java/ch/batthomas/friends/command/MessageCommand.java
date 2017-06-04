@@ -61,12 +61,12 @@ public class MessageCommand extends Command {
                             sb.append(args[i]);
                         }
                         to.sendMessage(new TextComponent("§7" + player.getName() + " » " + to.getName() + " :§7" + sb.toString()));
-
+                        player.sendMessage(new TextComponent("§7" + player.getName() + " » " + to.getName() + " :§7" + sb.toString()));
                     } else {
-                        new MessageBuilder(i18n).addReplacedText("msgnotpossible", "%PLAYER%", args[0]).sendMessage(player);
+                        new MessageBuilder(i18n).addReplacedText("msgnotpossible", "%PLAYER%", to.getName()).sendMessage(player);
                     }
                 } else {
-                    new MessageBuilder(i18n).addReplacedText("friendnot", "%PLAYER%", args[0]).sendMessage(player);
+                    new MessageBuilder(i18n).addReplacedText("friendnot", "%PLAYER%", to.getName()).sendMessage(player);
                 }
             } else {
                 new MessageBuilder(i18n).addText("msgself").sendMessage(player);
