@@ -1,0 +1,6 @@
+MySQL:
+  username: root
+  password: root
+  host: localhost
+  database: friends
+  port: 3306
