@@ -76,6 +76,9 @@ public class FriendCommand extends Command {
                             case "deny":
                                 denyRequest(player, args[1]);
                                 break;
+                            case "jump":
+                                jumpToPlayer(player, args[1]);
+                                break;
                             default:
                                 sendHelpMessage(player);
                                 break;
@@ -88,6 +91,32 @@ public class FriendCommand extends Command {
             } catch (SQLException | IOException ex) {
                 Logger.getLogger(FriendCommand.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    private void jumpToPlayer(ProxiedPlayer player, String name) throws IOException, SQLException {
+        ProxiedPlayer jumpTo = plugin.getProxy().getPlayer(name);
+        if (jumpTo != null && jumpTo.isConnected()) {
+            UUID uuid = mojang.getUUID(name);
+            if (!player.getName().equalsIgnoreCase(name)) {
+                if (plugin.getQuery().isFriend(player.getUniqueId(), uuid)) {
+                    if (plugin.getQuery().getSetting(uuid, "togglejump")) {
+                        if (!player.getServer().equals(jumpTo.getServer())) {
+                            player.connect(jumpTo.getServer().getInfo());
+                        } else {
+                            new MessageBuilder(i18n).addText("jumpsameserver").sendMessage(player);
+                        }
+                    } else {
+                        new MessageBuilder(i18n).addReplacedText("jumpnotpossible", "%PLAYER%", jumpTo.getName()).sendMessage(player);
+                    }
+                } else {
+                    new MessageBuilder(i18n).addReplacedText("notfriend", "%PLAYER%", jumpTo.getName()).sendMessage(player);
+                }
+            } else {
+                new MessageBuilder(i18n).addText("jumpself").sendMessage(player);
+            }
+        } else {
+            new MessageBuilder(i18n).addReplacedText("notonline", "%PLAYER%", name).sendMessage(player);
         }
     }
 
@@ -184,18 +213,18 @@ public class FriendCommand extends Command {
         if (!player.getName().equalsIgnoreCase(name)) {
             if (uuid != null && plugin.getQuery().getPlayerExists(uuid)) {
                 if (!plugin.getQuery().isFriend(player.getUniqueId(), uuid)) {
-                    if(plugin.getQuery().getSetting(uuid, "togglerequests")){
-                    if (!plugin.getQuery().getRequestExists(player.getUniqueId(), uuid)) {
-                        plugin.getQuery().addRequest(player, uuid);
-                        new MessageBuilder(i18n).addReplacedText("requestsent", "%PLAYER%", name).sendMessage(player);
-                        ProxiedPlayer receiver = plugin.getProxy().getPlayer(uuid);
-                        if (receiver != null && receiver.isConnected()) {
-                            new MessageBuilder(i18n).addReplacedText("requestget", "%PLAYER%", player.getName()).sendMessage(receiver);
+                    if (plugin.getQuery().getSetting(uuid, "togglerequests")) {
+                        if (!plugin.getQuery().getRequestExists(player.getUniqueId(), uuid)) {
+                            plugin.getQuery().addRequest(player, uuid);
+                            new MessageBuilder(i18n).addReplacedText("requestsent", "%PLAYER%", name).sendMessage(player);
+                            ProxiedPlayer receiver = plugin.getProxy().getPlayer(uuid);
+                            if (receiver != null && receiver.isConnected()) {
+                                new MessageBuilder(i18n).addReplacedText("requestget", "%PLAYER%", player.getName()).sendMessage(receiver);
+                            }
+                        } else {
+                            new MessageBuilder(i18n).addText("requestedalready").sendMessage(player);
                         }
                     } else {
-                        new MessageBuilder(i18n).addText("requestedalready").sendMessage(player);
-                    }
-                    }else{
                         new MessageBuilder(i18n).addText("requestnotpossible").sendMessage(player);
                     }
                 } else {

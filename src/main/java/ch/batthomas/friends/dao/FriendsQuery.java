@@ -105,6 +105,7 @@ public class FriendsQuery {
         statement.setString(2, uuidtwo.toString());
         mysql.executeUpdate(statement);
 
+        statement = mysql.getConnection().prepareStatement(query);
         statement.setString(1, uuidtwo.toString());
         statement.setString(2, uuidone.toString());
         mysql.executeUpdate(statement);

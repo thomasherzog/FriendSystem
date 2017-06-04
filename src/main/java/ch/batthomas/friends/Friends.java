@@ -1,6 +1,7 @@
 package ch.batthomas.friends;
 
 import ch.batthomas.friends.command.FriendCommand;
+import ch.batthomas.friends.command.MessageCommand;
 import ch.batthomas.friends.dao.FriendsQuery;
 import ch.batthomas.friends.database.MySQLConnector;
 import ch.batthomas.friends.i18n.I18NManager;
@@ -57,6 +58,7 @@ public class Friends extends Plugin {
 
     private void registerCommands() {
         getProxy().getPluginManager().registerCommand(this, new FriendCommand(this));
+        getProxy().getPluginManager().registerCommand(this, new MessageCommand(this));
     }
 
     public ConfigHelper getConfig() {
