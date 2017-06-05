@@ -83,6 +83,7 @@ public class MessageCommand extends Command {
         new MessageBuilder(i18n).addText("helpline10").sendMessage(player);
         new MessageBuilder(i18n).addText("helpline11").sendMessage(player);
         new MessageBuilder(i18n).addText("helpline12").sendMessage(player);
+        new MessageBuilder(i18n).addText("helpline13").sendMessage(player);
         new MessageBuilder(i18n).addText("separator").sendMessage(player);
     }
 }
